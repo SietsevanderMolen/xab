@@ -3,6 +3,7 @@ with System,
      Interfaces.C.Strings;
 with xcb;
 with xproto;
+with xinerama;
 with xab_types; use xab_types;
 
 package xab is
@@ -19,8 +20,14 @@ package xab is
                          Screen       : xab_screen_t)
                          return xab_connection_t;
 
+   function xab_has_xinerama (Connection : xab_connection_t)
+      return Boolean;
 
+   function xab_has_randr (Connection : xab_connection_t)
+      return Boolean;
 private
+
+   --  An access type to the xcb_screen_t type
    type xcb_screen_t_ptr is access all xproto.xcb_screen_t;
    Null_Screen : constant xcb_screen_t_ptr := null;
 
