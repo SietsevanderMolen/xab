@@ -20,9 +20,13 @@ package xab is
                          Screen       : xab_screen_t)
                          return xab_connection_t;
 
+   function xab_get_root_screen (Connection : xab_connection_t)
+      return xab_screen_t;
+
    function xab_has_xinerama (Connection : xab_connection_t)
       return Boolean;
 
+   --  Check wether the RandR extension is available on thin connection
    function xab_has_randr (Connection : xab_connection_t)
       return Boolean;
 private
@@ -33,6 +37,9 @@ private
 
    function xab_screen_t_to_xcb_screen_t (xabscreen : xab_screen_t)
       return xproto.xcb_screen_t;
+
+   function xcb_screen_t_to_xab_screen_t (xcbscreen : xproto.xcb_screen_t)
+      return xab_screen_t;
 
    --  Check a connection for errors
    --  @Raises: ConnectionFailedException
