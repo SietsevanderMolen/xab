@@ -20,13 +20,15 @@ package xab is
                          Screen       : xab_screen_t)
                          return xab_connection_t;
 
+   --  Return the root screen for this connection
    function xab_get_root_screen (Connection : xab_connection_t)
       return xab_screen_t;
 
+   --  Check wether the Xinerama extension is available on this connection
    function xab_has_xinerama (Connection : xab_connection_t)
       return Boolean;
 
-   --  Check wether the RandR extension is available on thin connection
+   --  Check wether the RandR extension is available on this connection
    function xab_has_randr (Connection : xab_connection_t)
       return Boolean;
 private
