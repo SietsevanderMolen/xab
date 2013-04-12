@@ -4,7 +4,7 @@ with xab;
 with xab_types;
 pragma Warnings (On);
 
-procedure libxab_deps is
+procedure xab_deps is
 begin
    null;
-end libxab_deps;
+end xab_deps;

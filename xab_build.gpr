@@ -1,6 +1,6 @@
-with "libxcb_ada";
+with "/usr/share/ada/adainclude/xcbada";
 
-project libxab_build is
+project xab_build is
    type Build_Type is ("Debug", "Production");
    Build : Build_Type := External ("Build", "Production");
 
@@ -14,4 +14,4 @@ project libxab_build is
             for Default_Switches ("Ada") use ("-O2", "-gnatp");
       end case;
    end Compiler;
-end libxab_build;
+end xab_build;
