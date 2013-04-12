@@ -1,7 +1,7 @@
 project xab is
 
    for Source_Dirs use ("/usr/share/ada/adainclude/xab");
-   for Library_ALI_Dir use ("/usr/lib/ada/adalib/xab");
+   for Library_ALI_Dir use "/usr/lib/ada/adalib/xab";
    for Library_Name use "xab";
    for Library_Kind use "dynamic";
    for Library_Dir use "/usr/lib";
