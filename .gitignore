@@ -1,4 +1,6 @@
 *.ali
 *.o
 *.a
-xab/
+lib/
+exe/
+build/

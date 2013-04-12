@@ -26,4 +26,4 @@ package xab_xproto is
       allowed_depths_len    : aliased Interfaces.Unsigned_8;
    end record;
    pragma Convention (C_Pass_By_Copy, xcb_screen_t);
-end xab.xproto;
+end xab_xproto;
