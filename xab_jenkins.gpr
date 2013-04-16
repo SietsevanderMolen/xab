@@ -1,0 +1,10 @@
+project xab is
+
+   for Source_Dirs use ("/var/lib/jenkins/share/ada/adainclude/xab");
+   for Library_ALI_Dir use "/var/lib/jenkins/lib/ada/adalib/xab";
+   for Library_Name use "xab";
+   for Library_Kind use "dynamic";
+   for Library_Dir use "/var/lib/jenkins/lib";
+
+   for Externally_Built use "True";
+end xab;

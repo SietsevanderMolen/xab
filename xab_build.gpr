@@ -1,4 +1,4 @@
-with "/usr/share/ada/adainclude/xcbada";
+with "xcbada";
 
 project xab_build is
    Version := "1";
