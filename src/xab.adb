@@ -2,7 +2,7 @@ with Interfaces.C.Strings;
 with Interfaces; use Interfaces;
 with xinerama;
 
-package body xab is
+ackage body xab is
    function xab_connect
       return xab_connection_t
    is
