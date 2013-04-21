@@ -2,8 +2,8 @@ with System,
      Interfaces.C,
      Interfaces.C.Strings;
 with xcb;
-with xproto;
-with xinerama;
+with xcbada_xproto;
+with xcbada_xinerama;
 with xab_types; use xab_types;
 
 package xab is
@@ -34,13 +34,13 @@ package xab is
 private
 
    --  An access type to the xcb_screen_t type
-   type xcb_screen_t_ptr is access all xproto.xcb_screen_t;
+   type xcb_screen_t_ptr is access all xcbada_xproto.xcb_screen_t;
    Null_Screen : constant xcb_screen_t_ptr := null;
 
    function xab_screen_t_to_xcb_screen_t (xabscreen : xab_screen_t)
-      return xproto.xcb_screen_t;
+      return xcbada_xproto.xcb_screen_t;
 
-   function xcb_screen_t_to_xab_screen_t (xcbscreen : xproto.xcb_screen_t)
+   function xcb_screen_t_to_xab_screen_t (xcbscreen : xcbada_xproto.xcb_screen_t)
       return xab_screen_t;
 
    --  Check a connection for errors

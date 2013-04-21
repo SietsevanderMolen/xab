@@ -1,6 +1,7 @@
 with Interfaces.C.Strings;
 with Interfaces; use Interfaces;
-with xinerama;
+with xcbada_xinerama;
+with xcbada_xproto;
 
 package body xab is
    function xab_connect
@@ -35,7 +36,7 @@ package body xab is
       xcbdisplayname : Interfaces.C.Strings.chars_ptr :=
          Interfaces.C.Strings.New_String (Display_Name);
       --  Convert the xab screen to an xcb screen
-      xcbscreen : aliased xproto.xcb_screen_t :=
+      xcbscreen : aliased xcbada_xproto.xcb_screen_t :=
          xab_screen_t_to_xcb_screen_t (Screen);
    begin
       Connection := xcb.xcb_connect (xcbdisplayname,
@@ -57,9 +58,9 @@ package body xab is
    function xab_get_root_screen (Connection : xab_connection_t)
       return xab_screen_t
    is
-      setup : access xproto.xcb_setup_t := xcb.xcb_get_setup (Connection);
-      screen : access xproto.xcb_screen_t := 
-         xproto.xcb_setup_roots_iterator (setup).data;
+      setup : access xcbada_xproto.xcb_setup_t := xcb.xcb_get_setup (Connection);
+      screen : access xcbada_xproto.xcb_screen_t := 
+         xcbada_xproto.xcb_setup_roots_iterator (setup).data;
    begin
       return xcb_screen_t_to_xab_screen_t (screen.all);
    end xab_get_root_screen;
@@ -68,7 +69,7 @@ package body xab is
       return Boolean
    is
       xcb_randr_id : aliased xcb.xcb_extension_t;
-      extension_reply : access xproto.xcb_query_extension_reply_t;
+      extension_reply : access xcbada_xproto.xcb_query_extension_reply_t;
    begin
       xcb_randr_id.name := Interfaces.C.Strings.New_String ("RANDR");
       extension_reply := xcb.xcb_get_extension_data(Connection, xcb_randr_id);
@@ -84,7 +85,7 @@ package body xab is
       return Boolean
    is
       xcb_xinerama_id : aliased xcb.xcb_extension_t;
-      extension_reply : access xproto.xcb_query_extension_reply_t;
+      extension_reply : access xcbada_xproto.xcb_query_extension_reply_t;
    begin
       xcb_xinerama_id.name := Interfaces.C.Strings.New_String ("XINERAMA");
       extension_reply := xcb.xcb_get_extension_data(Connection, xcb_xinerama_id);
@@ -98,9 +99,9 @@ package body xab is
 
    --  Convert a xab screen to an xcb screen for internal use
    function xab_screen_t_to_xcb_screen_t (xabscreen : xab_screen_t)
-      return xproto.xcb_screen_t
+      return xcbada_xproto.xcb_screen_t
    is
-      screen : xproto.xcb_screen_t;
+      screen : xcbada_xproto.xcb_screen_t;
    begin
       screen.root                  := Unsigned_32'Value (Integer'Image (xabscreen.root));
       screen.default_colormap      := Unsigned_32'Value (Integer'Image (xabscreen.default_colormap));
@@ -122,7 +123,7 @@ package body xab is
    end xab_screen_t_to_xcb_screen_t;
 
    --  Convert a xab screen to an xcb screen for internal use
-   function xcb_screen_t_to_xab_screen_t (xcbscreen : xproto.xcb_screen_t)
+   function xcb_screen_t_to_xab_screen_t (xcbscreen : xcbada_xproto.xcb_screen_t)
       return xab_screen_t
    is
       screen : xab_screen_t;
