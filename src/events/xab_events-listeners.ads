@@ -1,10 +1,15 @@
+with Ada.Containers.Indefinite_Vectors; use Ada.Containers;
+
 with Xab_Events.Event;
 
 package Xab_Events.Listeners is
    type Listener is tagged private;
+   type Listener_Access is access all Listener'Class;
+   package Listener_Container is new Indefinite_Vectors (Natural, Listener_Access);
 
    --  Registers a new listener to be notified
-   procedure Register_Listener (Handler : in Listener'Class);
+   procedure Register_Listener (L : in out Listener'Class;
+                                H : in Listener_Access);
    --  Removes a listener from the notification list
    procedure Unregister_Listener (Handler : in Listener'Class);
    --  Notifies listeners of a new event
@@ -18,9 +23,10 @@ package Xab_Events.Listeners is
    --  other event listeners here
 
 private
+
    type Listener is tagged
       record
-         null;
+         Listener_List : Listener_Container.Vector;
       end record;
 
    type Key_Press_Event_Listener is new Listener with null record;

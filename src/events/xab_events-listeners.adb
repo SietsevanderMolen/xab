@@ -1,9 +1,10 @@
 package body Xab_Events.Listeners is
    --  Registers a new listener to be notified
-   procedure Register_Listener (Handler : in Listener'Class)
+   procedure Register_Listener (L : in out Listener'Class;
+                                H : in Listener_Access)
    is
    begin
-      null;
+      L.Listener_List.Append (New_Item => H);
    end Register_Listener;
 
    --  Removes a listener from the notification list
