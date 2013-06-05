@@ -8,10 +8,12 @@ package body Xab_Events.Listeners is
    end Register_Listener;
 
    --  Removes a listener from the notification list
-   procedure Unregister_Listener (Handler : in Listener'Class)
+   procedure Unregister_Listener (L : in out Listener'Class;
+                                  H : in Listener_Access)
    is
+      Handler_Position : Listener_Container.Cursor := L.Listener_List.Find (Item => H);
    begin
-      null;
+      L.Listener_List.Delete (Position => Handler_Position);
    end Unregister_Listener;
 
    --  Notifies listeners of a new event

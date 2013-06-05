@@ -11,7 +11,8 @@ package Xab_Events.Listeners is
    procedure Register_Listener (L : in out Listener'Class;
                                 H : in Listener_Access);
    --  Removes a listener from the notification list
-   procedure Unregister_Listener (Handler : in Listener'Class);
+   procedure Unregister_Listener (L : in out Listener'Class;
+                                  H : in Listener_Access);
    --  Notifies listeners of a new event
    procedure Notify_Listeners (E : in Xab_Events.Event.Object'Class);
 
