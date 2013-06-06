@@ -8,7 +8,11 @@ package body Xab_Events.Event_Loop is
    begin
       accept Start;
       loop
-         accept Event;
+         select
+            accept Event (E : in Xab_Events.Event.Object'Class) do
+               Handle_Event (E);
+            end Event;
+         end select;
       end loop;
    end Main_Loop;
 end Xab_Events.Event_Loop;
