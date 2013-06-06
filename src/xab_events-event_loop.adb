@@ -1,18 +1,28 @@
+with xcb;
+with xcbada_xproto;
+
 package body Xab_Events.Event_Loop is
-   procedure Handle_Event (E : in Xab_Events.Event.Object'Class) is
+   procedure handle_event (e : in Xab_Events.Event.Object'Class) is
    begin
       null;
-   end Handle_Event;
+   end handle_event;
 
-   task body Main_Loop is
+   procedure start_event_loop (connection : xab_types.xab_connection_t)
+   is
+      ev : xcb.xcb_generic_event_t_p;
+      dpy : xcb.xcb_connection_t;
+
+      task Main_Loop is
+         entry Start;
+      end Main_Loop;
+      task body Main_Loop is
+      begin
+         accept Start;
+         loop
+            ev := xcb.xcb_wait_for_event (dpy);
+         end loop;
+      end Main_Loop;
    begin
-      accept Start;
-      loop
-         select
-            accept Event (E : in Xab_Events.Event.Object'Class) do
-               Handle_Event (E);
-            end Event;
-         end select;
-      end loop;
-   end Main_Loop;
+      null;
+   end start_event_loop;
 end Xab_Events.Event_Loop;
