@@ -9,7 +9,7 @@ package body xab is
    is
       Connection : xab_connection_t;
    begin
-      Connection := xcb.xcb_connect (Interfaces.C.Strings.Null_Ptr,
+      Connection := xcb.connect (Interfaces.C.Strings.Null_Ptr,
                                      Null_Screen);
       xab_check_connection (Connection);
       --  Return the connection
@@ -23,7 +23,7 @@ package body xab is
       xcbdisplayname : Interfaces.C.Strings.chars_ptr :=
          Interfaces.C.Strings.New_String (Display_Name);
    begin
-      Connection := xcb.xcb_connect (xcbdisplayname, Null_Screen);
+      Connection := xcb.connect (xcbdisplayname, Null_Screen);
       xab_check_connection (Connection);
       return Connection;
    end xab_connect;
@@ -39,8 +39,8 @@ package body xab is
       xcbscreen : aliased xcbada_xproto.xcb_screen_t :=
          xab_screen_t_to_xcb_screen_t (Screen);
    begin
-      Connection := xcb.xcb_connect (xcbdisplayname,
-                                     xcbscreen'Access);
+      Connection := xcb.connect (xcbdisplayname,
+                                 xcbscreen'Access);
       xab_check_connection (Connection);
       return Connection;
    end xab_connect;
@@ -50,7 +50,7 @@ package body xab is
       ConnectionFailedException : exception;
    begin
       --  Check connection for errors
-      if xcb.xcb_connection_has_error (Connection) = 1 then
+      if xcb.connection_has_error (Connection) = 1 then
          raise ConnectionFailedException with "Connection failed";
       end if;
    end xab_check_connection;
@@ -58,7 +58,7 @@ package body xab is
    function xab_get_root_screen (Connection : xab_connection_t)
       return xab_screen_t
    is
-      setup : access xcbada_xproto.xcb_setup_t := xcb.xcb_get_setup (Connection);
+      setup : access xcbada_xproto.xcb_setup_t := xcb.get_setup (Connection);
       screen : access xcbada_xproto.xcb_screen_t := 
          xcbada_xproto.xcb_setup_roots_iterator (setup).data;
    begin
@@ -72,7 +72,7 @@ package body xab is
       extension_reply : access xcbada_xproto.xcb_query_extension_reply_t;
    begin
       xcb_randr_id.name := Interfaces.C.Strings.New_String ("RANDR");
-      extension_reply := xcb.xcb_get_extension_data(Connection, xcb_randr_id);
+      extension_reply := xcb.get_extension_data(Connection, xcb_randr_id);
 
       if extension_reply.present = 1 then
          return True;
@@ -88,7 +88,7 @@ package body xab is
       extension_reply : access xcbada_xproto.xcb_query_extension_reply_t;
    begin
       xcb_xinerama_id.name := Interfaces.C.Strings.New_String ("XINERAMA");
-      extension_reply := xcb.xcb_get_extension_data(Connection, xcb_xinerama_id);
+      extension_reply := xcb.get_extension_data(Connection, xcb_xinerama_id);
 
       if extension_reply.present = 1 then
          return True;

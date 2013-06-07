@@ -24,7 +24,7 @@ package body Xab_Events.Event_Loop is
       end Main_Loop;
       task body Main_Loop is
       begin
-         screen := xcbada_xproto.xcb_setup_roots_iterator (xcb.xcb_get_setup (dpy)).data;
+         screen := xcbada_xproto.xcb_setup_roots_iterator (xcb.get_setup (dpy)).data;
          root := screen.root;
          --  Left mouse button
          vc := xcbada_xproto.xcb_grab_button (dpy, 0, root,
@@ -36,11 +36,11 @@ package body Xab_Events.Event_Loop is
                   xcbada_xproto.XCB_EVENT_MASK_BUTTON_PRESS or xcbada_xproto.XCB_EVENT_MASK_BUTTON_RELEASE,
                   xcbada_xproto.XCB_GRAB_MODE_ASYNC, xcbada_xproto.XCB_GRAB_MODE_ASYNC, root, xcb.XCB_NONE, 3,
                   xcbada_xproto.XCB_MOD_MASK_ANY);
+         vi := xcb.flush (dpy);
 
-         vi := xcb.xcb_flush (dpy);
          Ada.Text_IO.Put_Line ("starting loop");
          loop
-            ev := xcb.xcb_wait_for_event (dpy);
+            ev := xcb.wait_for_event (dpy);
             declare
                i : Integer := Integer (ev.all.response_type);
             begin
