@@ -1,5 +1,5 @@
 package body Xab_Events.Subjects_And_Observers is
-   procedure Notify (Subject : in out Subject_Type'Class) is
+   procedure Notify (Subject : in out Subject_T'Class) is
       Observer : Observer_Access := Subject.Head;
    begin
       while Observer /= null loop
@@ -11,7 +11,7 @@ package body Xab_Events.Subjects_And_Observers is
    procedure Initialize (Control : in out Observer_Control) is Observer :
       constant Observer_Access := Control.Observer.all'Unchecked_Access;
 
-      Subject : Subject_Type'Class renames Observer.Subject.all;
+      Subject : Subject_T'Class renames Observer.Subject.all;
    begin
       Observer.Next := Subject.Head;
       Subject.Head := Observer;
@@ -25,7 +25,7 @@ package body Xab_Events.Subjects_And_Observers is
       Observer : constant Observer_Access :=
          Control.Observer.all'Unchecked_Access;
 
-         Subject : Subject_Type'Class renames Observer.Subject.all;
+         Subject : Subject_T'Class renames Observer.Subject.all;
 
          Prev  : Observer_Access;
          Index : Observer_Access;
