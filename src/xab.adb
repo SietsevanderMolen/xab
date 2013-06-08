@@ -9,8 +9,8 @@ package body xab is
    is
       Connection : xab_connection_t;
    begin
-      Connection := xcb.connect (Interfaces.C.Strings.Null_Ptr,
-                                     Null_Screen);
+      Connection := xcb.connect (xcb.Null_Display,
+                                 xcb.Null_Screen);
       xab_check_connection (Connection);
       --  Return the connection
       return Connection;
