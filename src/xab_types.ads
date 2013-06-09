@@ -1,22 +1,18 @@
 with System;
-package xab_types is
-   --  type Integer_8  is range -2**(8-1)  .. 2**(8-1) - 1;
-   --  type Integer_16 is range -2**(16-1) .. 2**(16-1) - 1;
-   --  type Integer_32 is range -2**(32-1) .. 2**(32-1) - 1;
+package Xab_Types is
+   subtype Xab_Colormap_T     is Integer;
+   subtype Xab_Connection_T   is System.Address;
+   subtype Xab_Extension_T    is System.Address;
+   subtype Xab_Gcontext_T     is Integer;
+   subtype Xab_Keycode_T      is Integer;
+   subtype Xab_Pixmap_T       is Integer;
+   subtype Xab_Randr_Output_T is Integer;
+   subtype Xab_Visualid_T     is Integer;
+   subtype Xab_Window_T       is Integer;
 
-   subtype xab_colormap_t     is Integer;
-   subtype xab_connection_t   is System.Address;
-   subtype xab_extension_t    is System.Address;
-   subtype xab_gcontext_t     is Integer;
-   subtype xab_keycode_t      is Integer;
-   subtype xab_pixmap_t       is Integer;
-   subtype xab_randr_output_t is Integer;
-   subtype xab_visualid_t     is Integer;
-   subtype xab_window_t       is Integer;
-
-   type xab_screen_t is record
-      root                  : aliased xab_window_t;
-      default_colormap      : aliased xab_colormap_t;
+   type Xab_Screen_T is record
+      root                  : aliased Xab_Window_T;
+      default_colormap      : aliased Xab_Colormap_T;
       white_pixel           : aliased Integer;
       black_pixel           : aliased Integer;
       current_input_masks   : aliased Integer;
@@ -26,10 +22,10 @@ package xab_types is
       height_in_millimeters : aliased Integer;
       min_installed_maps    : aliased Integer;
       max_installed_maps    : aliased Integer;
-      root_visual           : aliased xab_visualid_t;
+      root_visual           : aliased Xab_Visualid_T;
       backing_stores        : aliased Integer;
       save_unders           : aliased Integer;
       root_depth            : aliased Integer;
       allowed_depths_len    : aliased Integer;
    end record;
-end xab_types;
+end Xab_Types;

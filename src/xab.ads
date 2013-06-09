@@ -4,32 +4,32 @@ with System,
 with xcb;
 with xcbada_xproto;
 with xcbada_xinerama;
-with xab_types; use xab_types;
+with Xab_Types; use Xab_Types;
 
-package xab is
+package Xab is
    --  Connect to xcb using env variables for both the display
    --  and the screen
-   function xab_connect return xab_connection_t;
+   function Xab_Connect return Xab_Connection_T;
 
    --  Connect to xcb using an env variable for the screen
-   function xab_connect (Display_Name : String)
-                         return xab_connection_t;
+   function Xab_Connect (Display_Name : String)
+                         return Xab_Connection_T;
 
    --  Connect to xcb
-   function xab_connect (Display_Name : String;
-                         Screen       : xab_screen_t)
-                         return xab_connection_t;
+   function Xab_Connect (Display_Name : String;
+                         Screen       : Xab_Screen_T)
+                         return Xab_Connection_T;
 
    --  Return the root screen for this connection
-   function xab_get_root_screen (Connection : xab_connection_t)
-      return xab_screen_t;
+   function Xab_Get_Root_Screen (Connection : Xab_Connection_T)
+      return Xab_Screen_T;
 
    --  Check wether the Xinerama extension is available on this connection
-   function xab_has_xinerama (Connection : xab_connection_t)
+   function Xab_Has_Xinerama (Connection : Xab_Connection_T)
       return Boolean;
 
    --  Check wether the RandR extension is available on this connection
-   function xab_has_randr (Connection : xab_connection_t)
+   function Xab_Has_Randr (Connection : Xab_Connection_T)
       return Boolean;
 private
 
@@ -37,13 +37,13 @@ private
    type xcb_screen_t_ptr is access all xcbada_xproto.xcb_screen_t;
    Null_Screen : constant xcb_screen_t_ptr := null;
 
-   function xab_screen_t_to_xcb_screen_t (xabscreen : xab_screen_t)
+   function Xab_Screen_T_to_xcb_screen_t (xabscreen : Xab_Screen_T)
       return xcbada_xproto.xcb_screen_t;
 
-   function xcb_screen_t_to_xab_screen_t (xcbscreen : xcbada_xproto.xcb_screen_t)
-      return xab_screen_t;
+   function Xcb_Screen_T_To_Xab_Screen_T (xcbscreen : xcbada_xproto.xcb_screen_t)
+      return Xab_Screen_T;
 
    --  Check a connection for errors
    --  @Raises: ConnectionFailedException
-   procedure xab_check_connection (Connection : xab_connection_t);
-end xab;
+   procedure Xab_Check_Connection (Connection : Xab_Connection_T);
+end Xab;
