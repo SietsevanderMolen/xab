@@ -11,21 +11,21 @@ package Xab_Types is
    subtype Xab_Window_T       is Integer;
 
    type Xab_Screen_T is record
-      root                  : aliased Xab_Window_T;
-      default_colormap      : aliased Xab_Colormap_T;
-      white_pixel           : aliased Integer;
-      black_pixel           : aliased Integer;
-      current_input_masks   : aliased Integer;
-      width_in_pixels       : aliased Integer;
-      height_in_pixels      : aliased Integer;
-      width_in_millimeters  : aliased Integer;
-      height_in_millimeters : aliased Integer;
-      min_installed_maps    : aliased Integer;
-      max_installed_maps    : aliased Integer;
-      root_visual           : aliased Xab_Visualid_T;
-      backing_stores        : aliased Integer;
-      save_unders           : aliased Integer;
-      root_depth            : aliased Integer;
-      allowed_depths_len    : aliased Integer;
+      Root                  : aliased Xab_Window_T;
+      Default_Colormap      : aliased Xab_Colormap_T;
+      White_Pixel           : aliased Integer;
+      Black_Pixel           : aliased Integer;
+      Current_Input_Masks   : aliased Integer;
+      Width_In_Pixels       : aliased Integer;
+      Height_In_Pixels      : aliased Integer;
+      Width_In_Millimeters  : aliased Integer;
+      Height_In_Millimeters : aliased Integer;
+      Min_Installed_Maps    : aliased Integer;
+      Max_Installed_Maps    : aliased Integer;
+      Root_Visual           : aliased Xab_Visualid_T;
+      Backing_Stores        : aliased Integer;
+      Save_Unders           : aliased Integer;
+      Root_Depth            : aliased Integer;
+      Allowed_Depths_Len    : aliased Integer;
    end record;
 end Xab_Types;
