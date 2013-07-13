@@ -1,14 +1,14 @@
 -------------------------------------------------------------------------------
 --                                                                           --
---                   Copyright (C) 2012-, Sietse van der Molen		     --
+--                   Copyright (C) 2012-, Sietse van der Molen               --
 --                                                                           --
---    This file is part of XAB.			 	   	             --
---									     --
+--    This file is part of XAB.                                              --
+--                                                                           --
 --    XAB is free software: you can redistribute it and/or modify            --
 --    it under the terms of the GNU General Public License as published by   --
 --    the Free Software Foundation, either version 3 of the License, or      --
 --    (at your option) any later version.                                    --
---   		 		 	 	 	 	 	     --
+--                                                                           --
 --    XAB is distributed in the hope that it will be useful,                 --
 --    but WITHOUT ANY WARRANTY; without even the implied warranty of         --
 --    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          --
@@ -74,3 +74,4 @@ package body Xab_Events.Event_Loop is
       null;
    end start_event_loop;
 end Xab_Events.Event_Loop;
+--  vim:ts=3:expandtab:tw=80
