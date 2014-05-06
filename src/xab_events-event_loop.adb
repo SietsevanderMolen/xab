@@ -23,6 +23,7 @@ with xcb;
 with xcbada_xproto;
 
 with Ada.Text_IO;
+with Ada.Unchecked_Conversion;
 with Interfaces; use Interfaces;
 
 package body Xab_Events.Event_Loop is
@@ -35,7 +36,7 @@ package body Xab_Events.Event_Loop is
    is
       vi     : Integer;
       pragma Unreferenced (vi);
-      vc     : xcb.xcb_void_cookie_t;
+      vc     : xcb.xcb_void_cookie_t;  -- used when a cookie is not necessary
       pragma Unreferenced (vc);
       ev : xcb.xcb_generic_event_t_p;
       dpy : xcb.xcb_connection_t := xcb.xcb_connection_t (connection);
@@ -63,10 +64,26 @@ package body Xab_Events.Event_Loop is
          loop
             ev := xcb.wait_for_event (dpy);
             declare
-               i : Integer := Integer (ev.all.response_type);
+               response_type : Integer := Integer (ev.response_type);
+               function Convert is new Ada.Unchecked_Conversion(
+                  xcb.xcb_generic_event_t_p,
+                  xcbada_xproto.xcb_button_press_event_t_p);
             begin
                --Ada.Text_IO.Put_Line (Interfaces.Unsigned_8'Image (ev.all.response_type));
-               Ada.Text_IO.Put_Line ("Got event type: " & Integer'Image (i));
+               Ada.Text_IO.Put_Line ("Got ev type: " & Integer'Image (response_type));
+               case response_type is
+                  when xcbada_xproto.XCB_BUTTON_PRESS =>
+                     declare
+                        event : xcbada_xproto.xcb_button_press_event_t_p :=
+                                Convert (ev);
+                        event_x : String := Interfaces.Unsigned_16'Image (event.event_x);
+                     begin
+                        Ada.Text_IO.Put_Line ("Button press at " & event_x);
+                     end;
+                  when others =>
+                        Ada.Text_IO.Put_Line ("Unhandled event: " &
+                        Integer'Image (response_type));
+               end case;
             end;
          end loop;
       end Main_Loop;

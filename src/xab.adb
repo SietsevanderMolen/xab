@@ -81,7 +81,7 @@ package body Xab is
       return Xab_Screen_T
    is
       setup : access xcbada_xproto.xcb_setup_t := xcb.get_setup (Connection);
-      screen : access xcbada_xproto.xcb_screen_t := 
+      screen : access xcbada_xproto.xcb_screen_t :=
          xcbada_xproto.xcb_setup_roots_iterator (setup).data;
    begin
       return Xcb_Screen_T_To_Xab_Screen_T (screen.all);
