@@ -19,8 +19,31 @@
 --                                                                           --
 -------------------------------------------------------------------------------
 
-limited with Xab_Events.Subjects_And_Observers;
+with Xab;
+with Xab_Types;
+with xcb;
+with xcbada_xproto;
+with xcbada_xinerama;
 
 package Xab_Events is
+   type Generic_Event is tagged null record;
+   function FromXCB (Request : xcb.xcb_generic_event_t)
+      return Generic_Event'class;
+
+   type Configure_Request_Event is new Generic_Event with
+      record
+         Stack_Mode : Integer;
+         Sequence : integer;
+         Parent : Xab_Types.Window;
+         Window : Xab_Types.Window;
+         Sibling : Xab_Types.Window;
+         X : Integer;
+         Y : Integer;
+         Width : Integer;
+         Height : Integer;
+         Border_Width : Integer;
+         --  uint8_t      response_type;
+         --  uint16_t     value_mask;
+      end record;
 end Xab_Events;
---  vim:ts=3:expandtab:tw=80
+--  vim:ts=3:sts=3:sw=3:expandtab:tw=80

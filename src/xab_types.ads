@@ -21,19 +21,19 @@
 
 with System;
 package Xab_Types is
-   subtype Xab_Colormap_T     is Integer;
-   subtype Xab_Connection_T   is System.Address;
-   subtype Xab_Extension_T    is System.Address;
-   subtype Xab_Gcontext_T     is Integer;
-   subtype Xab_Keycode_T      is Integer;
-   subtype Xab_Pixmap_T       is Integer;
-   subtype Xab_Randr_Output_T is Integer;
-   subtype Xab_Visualid_T     is Integer;
-   subtype Xab_Window_T       is Integer;
+   subtype Colormap     is Integer;
+   subtype Connection   is System.Address;
+   subtype Extension    is System.Address;
+   subtype Gcontext     is Integer;
+   subtype Keycode      is Integer;
+   subtype Pixmap       is Integer;
+   subtype Randr_Output is Integer;
+   subtype Visualid     is Integer;
+   subtype Window       is Integer;
 
-   type Xab_Screen_T is record
-      Root                  : aliased Xab_Window_T;
-      Default_Colormap      : aliased Xab_Colormap_T;
+   type Screen is record
+      Root                  : aliased Window;
+      Default_Colormap      : aliased Colormap;
       White_Pixel           : aliased Integer;
       Black_Pixel           : aliased Integer;
       Current_Input_Masks   : aliased Integer;
@@ -43,7 +43,7 @@ package Xab_Types is
       Height_In_Millimeters : aliased Integer;
       Min_Installed_Maps    : aliased Integer;
       Max_Installed_Maps    : aliased Integer;
-      Root_Visual           : aliased Xab_Visualid_T;
+      Root_Visual           : aliased Visualid;
       Backing_Stores        : aliased Integer;
       Save_Unders           : aliased Integer;
       Root_Depth            : aliased Integer;

@@ -25,59 +25,59 @@ with System,
 with xcb;
 with xcbada_xproto;
 with xcbada_xinerama;
-with Xab_Types; use Xab_Types;
+with Xab_Types;
 
 package Xab is
    --  Connect to xcb using env variables for both the display
    --  and the screen
-   function Xab_Connect return Xab_Connection_T;
+   function Connect return Xab_Types.Connection;
 
    --  Connect to xcb using an env variable for the screen
-   function Xab_Connect (Display_Name : String)
-                         return Xab_Connection_T;
+   function Connect (Display_Name : String)
+                         return Xab_Types.Connection;
 
    --  Connect to xcb
-   function Xab_Connect (Display_Name : String;
-                         Screen       : Xab_Screen_T)
-                         return Xab_Connection_T;
+   function Connect (Display_Name : String;
+                         Screen   : Xab_Types.Screen)
+                         return Xab_Types.Connection;
 
    --  Return the root screen for this connection
-   function Xab_Get_Root_Screen (Connection : Xab_Connection_T)
-      return Xab_Screen_T;
+   function Get_Root_Screen (Connection : Xab_Types.Connection)
+      return Xab_Types.Screen;
 
    --  Check wether the Xinerama extension is available on this connection
-   function Xab_Has_Xinerama (Connection : Xab_Connection_T)
+   function Has_Xinerama (Connection : Xab_Types.Connection)
       return Boolean;
 
    --  Check wether the RandR extension is available on this connection
-   function Xab_Has_Randr (Connection : Xab_Connection_T)
+   function Has_Randr (Connection : Xab_Types.Connection)
       return Boolean;
 
    --  Helper procedure to configure a window
-   procedure Xab_Configure_Window (Connection : Xab_Connection_T;
-                                   Win : Xab_Window_T;
+   procedure Configure_Window (Connection : Xab_Types.Connection;
+                                   Win : Xab_Types.Window;
                                    X : Integer;
                                    Y : Integer;
                                    Width : Integer;
                                    Height : Integer);
 
    --  Maps a window
-   procedure Xab_Map_Window (Connection : Xab_Connection_T;
-                             Window : Xab_Window_T);
+   procedure Map_Window (Connection : Xab_Types.Connection;
+                             Window : Xab_Types.Window);
 private
 
-   --  An access type to the xcb_screen_t type
-   type xcb_screen_t_ptr is access all xcbada_xproto.xcb_screen_t;
-   Null_Screen : constant xcb_screen_t_ptr := null;
+   --  An access type to the xcb_screen type
+   type xcb_screen_ptr is access all xcbada_xproto.xcb_screen_t;
+   Null_Screen : constant xcb_screen_ptr := null;
 
-   function Xab_Screen_T_to_xcb_screen_t (xabscreen : Xab_Screen_T)
+   function Xab_Screen_To_xcb_screen (xabscreen : Xab_Types.Screen)
       return xcbada_xproto.xcb_screen_t;
 
-   function Xcb_Screen_T_To_Xab_Screen_T (xcbscreen : xcbada_xproto.xcb_screen_t)
-      return Xab_Screen_T;
+   function Xcb_Screen_To_Xab_Screen (xcbscreen : xcbada_xproto.xcb_screen_t)
+      return Xab_Types.Screen;
 
    --  Check a connection for errors
    --  @Raises: ConnectionFailedException
-   procedure Xab_Check_Connection (Connection : Xab_Connection_T);
+   procedure Check_Connection (Connection : Xab_Types.Connection);
 end Xab;
 --  vim:ts=3:expandtab:tw=80

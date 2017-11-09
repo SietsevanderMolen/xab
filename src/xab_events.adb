@@ -19,13 +19,13 @@
 --                                                                           --
 -------------------------------------------------------------------------------
 
-with Xab_Events.Event;
-with xab_types;
-
-package Xab_Events.Event_Loop is
-   --  Starts the main event loop
-   procedure start_event_loop (connection : xab_types.connection);
-private
-   procedure handle_event (e : in Xab_Events.Event.Object'Class);
-end Xab_Events.Event_Loop;
---  vim:ts=3:expandtab:tw=80
+package body Xab_Events is
+   function FromXCB (Request : xcb.xcb_generic_event_t)
+      return Generic_Event'class
+   is
+      ev : Configure_Request_Event;
+   begin
+      return ev;
+   end FromXCB;
+end Xab_Events;
+--  vim:ts=3:sts=3:sw=3:expandtab:tw=80

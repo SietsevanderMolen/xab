@@ -27,7 +27,7 @@ with Ada.Unchecked_Conversion;
 with Interfaces; use Interfaces;
 
 with Xab; use Xab;
-with Xab_Types; use Xab_Types;
+with Xab_Types;
 
 package body Xab_Events.Event_Loop is
    procedure handle_event (e : in Xab_Events.Event.Object'Class) is
@@ -35,7 +35,7 @@ package body Xab_Events.Event_Loop is
       null;
    end handle_event;
 
-   procedure start_event_loop (connection : xab_types.xab_connection_t)
+   procedure start_event_loop (connection : Xab_Types.Connection)
    is
       vi     : Integer;
       pragma Unreferenced (vi);
@@ -57,17 +57,17 @@ package body Xab_Events.Event_Loop is
       root := screen.root;
       --  Left mouse button
       vc := xcbada_xproto.xcb_grab_button (dpy, 0, root,
-      xcbada_xproto.XCB_EVENT_MASK_BUTTON_PRESS or xcbada_xproto.XCB_EVENT_MASK_BUTTON_RELEASE,
-      xcbada_xproto.XCB_GRAB_MODE_ASYNC, xcbada_xproto.XCB_GRAB_MODE_ASYNC, root, xcb.XCB_NONE, 1,
-      xcbada_xproto.XCB_MOD_MASK_ANY);
+         xcbada_xproto.XCB_EVENT_MASK_BUTTON_PRESS or xcbada_xproto.XCB_EVENT_MASK_BUTTON_RELEASE,
+         xcbada_xproto.XCB_GRAB_MODE_ASYNC, xcbada_xproto.XCB_GRAB_MODE_ASYNC, root, xcb.XCB_NONE, 1,
+         xcbada_xproto.XCB_MOD_MASK_ANY);
       --  Right mouse button
       vc := xcbada_xproto.xcb_grab_button (dpy, 0, root,
-      xcbada_xproto.XCB_EVENT_MASK_BUTTON_PRESS or xcbada_xproto.XCB_EVENT_MASK_BUTTON_RELEASE,
-      xcbada_xproto.XCB_GRAB_MODE_ASYNC, xcbada_xproto.XCB_GRAB_MODE_ASYNC, root, xcb.XCB_NONE, 3,
-      xcbada_xproto.XCB_MOD_MASK_ANY);
+         xcbada_xproto.XCB_EVENT_MASK_BUTTON_PRESS or xcbada_xproto.XCB_EVENT_MASK_BUTTON_RELEASE,
+         xcbada_xproto.XCB_GRAB_MODE_ASYNC, xcbada_xproto.XCB_GRAB_MODE_ASYNC, root, xcb.XCB_NONE, 3,
+         xcbada_xproto.XCB_MOD_MASK_ANY);
       -- other events
       vc := xcbada_xproto.xcb_change_window_attributes (dpy, root, xcbada_xproto.XCB_CW_EVENT_MASK,
-      events_we_listen_to'Access);
+                                                        events_we_listen_to'Access);
       vi := xcb.flush (dpy);
 
       loop
@@ -80,40 +80,35 @@ package body Xab_Events.Event_Loop is
                when xcbada_xproto.XCB_BUTTON_PRESS =>
                   declare
                      function Convert is new Ada.Unchecked_Conversion(
-                     xcb.xcb_generic_event_t_p,
-                     xcbada_xproto.xcb_button_press_event_t_p);
-                     event : xcbada_xproto.xcb_button_press_event_t_p :=
-                        Convert (ev);
-                        event_x : String := Interfaces.Unsigned_16'Image (event.event_x);
+                        xcb.xcb_generic_event_t, xcbada_xproto.xcb_button_press_event_t);
+                     event : xcbada_xproto.xcb_button_press_event_t := Convert (ev.all);
+                     event_x : String := Interfaces.Integer_16'Image (event.event_x);
                      begin
                         Ada.Text_IO.Put_Line ("Button press at " & event_x);
                      end;
                when xcbada_xproto.XCB_CONFIGURE_REQUEST =>
                   declare
                      function Convert is new Ada.Unchecked_Conversion(
-                        xcb.xcb_generic_event_t_p,
-                        xcbada_xproto.xcb_configure_request_event_t_p);
-                     event : xcbada_xproto.xcb_configure_request_event_t_p := Convert (ev);
+                        xcb.xcb_generic_event_t, xcbada_xproto.xcb_configure_request_event_t);
+                     event : xcbada_xproto.xcb_configure_request_event_t := Convert (ev.all);
                      mask : String := Interfaces.Unsigned_16'Image (event.value_mask);
                   begin
                      Ada.Text_IO.Put_Line ("configure request with X: " & Interfaces.Integer_16'Image (event.x));
                      Ada.Text_IO.Put_Line ("configure request with Y: " & Interfaces.Integer_16'Image(event.y));
                      Ada.Text_IO.Put_Line ("configure request with Width: " & Interfaces.Unsigned_16'Image (event.width));
                      Ada.Text_IO.Put_Line ("configure request with Height: " & Interfaces.Unsigned_16'Image (event.height));
-                     Xab_Configure_Window (dpy, Integer(event.window),
+                     Xab.Configure_Window (dpy, Integer(event.window),
                                                 Integer (event.x), Integer (event.y),
                                                 Integer (event.width), Integer (event.height)); 
                   end;
                when xcbada_xproto.XCB_MAP_REQUEST =>
                   declare
                      function Convert is new Ada.Unchecked_Conversion(
-                        xcb.xcb_generic_event_t_p,
-                        xcbada_xproto.xcb_map_request_event_t_p);
-                     event : xcbada_xproto.xcb_map_request_event_t_p :=
-                        Convert (ev);
+                        xcb.xcb_generic_event_t, xcbada_xproto.xcb_map_request_event_t);
+                     event : xcbada_xproto.xcb_map_request_event_t := Convert (ev.all);
                      begin
                         Ada.Text_IO.Put_Line ("map request");
-                        Xab_Map_Window (dpy, Xab_Window_T (event.window));
+                        Xab.Map_Window (dpy, Xab_Types.Window (event.window));
                      end;
                when others =>
                   Ada.Text_IO.Put_Line ("Unhandled event: " & Integer'Image (response_type));

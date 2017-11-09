@@ -25,49 +25,51 @@ with Interfaces; use Interfaces;
 with Xcbada_Xinerama;
 with Xcbada_Xproto;
 
+with Xab_Types;
+
 package body Xab is
-   function Xab_Connect
-      return Xab_Connection_T
+   function Connect
+      return Xab_Types.Connection
    is
-      Connection : Xab_Connection_T;
+      Connection : Xab_Types.Connection;
    begin
       Connection := xcb.connect (xcb.Null_Display,
                                  xcb.Null_Screen);
-      Xab_Check_Connection (Connection);
+      Check_Connection (Connection);
       --  Return the connection
       return Connection;
-   end Xab_Connect;
+   end Connect;
 
-   function Xab_Connect (Display_Name : String)
-                         return Xab_Connection_T is
-      Connection : Xab_Connection_T;
+   function Connect (Display_Name : String)
+                         return Xab_Types.Connection is
+      Connection : Xab_Types.Connection;
       --  Convert display name to C style string
       xcbdisplayname : Interfaces.C.Strings.chars_ptr :=
          Interfaces.C.Strings.New_String (Display_Name);
    begin
       Connection := xcb.connect (xcbdisplayname, Null_Screen);
-      Xab_Check_Connection (Connection);
+      Check_Connection (Connection);
       return Connection;
-   end Xab_Connect;
+   end Connect;
 
-   function Xab_Connect (Display_Name : String;
-                         Screen       : Xab_Screen_T)
-                         return Xab_Connection_T is
-      Connection : Xab_Connection_T;
+   function Connect (Display_Name : String;
+                         Screen       : Xab_Types.Screen)
+                         return Xab_Types.Connection is
+      Connection : Xab_Types.Connection;
       --  Convert display name to C style string
       xcbdisplayname : Interfaces.C.Strings.chars_ptr :=
          Interfaces.C.Strings.New_String (Display_Name);
       --  Convert the xab screen to an xcb screen
       xcbscreen : aliased xcbada_xproto.xcb_screen_t :=
-         Xab_Screen_T_To_Xcb_Screen_T (Screen);
+         Xab_Screen_To_Xcb_Screen (Screen);
    begin
       Connection := xcb.connect (xcbdisplayname,
                                  xcbscreen'Access);
-      Xab_Check_Connection (Connection);
+      Check_Connection (Connection);
       return Connection;
-   end Xab_Connect;
+   end Connect;
 
-   procedure Xab_Check_Connection (Connection : Xab_Connection_T)
+   procedure Check_Connection (Connection : Xab_Types.Connection)
    is
       ConnectionFailedException : exception;
    begin
@@ -75,19 +77,19 @@ package body Xab is
       if xcb.connection_has_error (Connection) = 1 then
          raise ConnectionFailedException with "Connection failed";
       end if;
-   end Xab_Check_Connection;
+   end Check_Connection;
 
-   function xab_get_root_screen (Connection : Xab_Connection_T)
-      return Xab_Screen_T
+   function get_root_screen (Connection : Xab_Types.Connection)
+      return Xab_Types.Screen
    is
       setup : access xcbada_xproto.xcb_setup_t := xcb.get_setup (Connection);
       screen : access xcbada_xproto.xcb_screen_t :=
          xcbada_xproto.xcb_setup_roots_iterator (setup).data;
    begin
-      return Xcb_Screen_T_To_Xab_Screen_T (screen.all);
-   end xab_get_root_screen;
+      return Xcb_Screen_To_Xab_Screen (screen.all);
+   end get_root_screen;
 
-   function Xab_Has_Randr (Connection : Xab_Connection_T)
+   function Has_Randr (Connection : Xab_Types.Connection)
       return Boolean
    is
       xcb_randr_id    : aliased xcb.xcb_extension_t;
@@ -101,9 +103,9 @@ package body Xab is
       else
          return False;
       end if;
-   end Xab_Has_Randr;
+   end Has_Randr;
 
-   function Xab_Has_Xinerama (Connection : Xab_Connection_T)
+   function Has_Xinerama (Connection : Xab_Types.Connection)
       return Boolean
    is
       xcb_xinerama_id : aliased xcb.xcb_extension_t;
@@ -117,20 +119,20 @@ package body Xab is
       else
          return False;
       end if;
-   end Xab_Has_Xinerama;
+   end Has_Xinerama;
 
-   procedure Xab_Map_Window (Connection : Xab_Connection_T;
-                             Window : Xab_Window_T)
+   procedure Map_Window (Connection : Xab_Types.Connection;
+                             Window : Xab_Types.Window)
    is
       vc : xcb.xcb_void_cookie_t;
       vi : Integer;
    begin
       vc := xcbada_xproto.xcb_map_window (Connection, xcbada_xproto.xcb_window_t (Window));
       vi := xcb.flush(Connection);
-   end Xab_Map_Window;
+   end Map_Window;
 
-   procedure Xab_Configure_Window (Connection : Xab_Connection_T;
-                                   Win : Xab_Window_T;
+   procedure Configure_Window (Connection : Xab_Types.Connection;
+                                   Win : Xab_Types.Window;
                                    X : Integer;
                                    Y : Integer;
                                    Width : Integer;
@@ -156,10 +158,10 @@ package body Xab is
                                                 Mask,
                                                 Values);
       vi := xcb.flush(Connection);
-   end Xab_Configure_Window;
+   end Configure_Window;
 
    --  Convert a xab screen to an xcb screen for internal use
-   function Xab_Screen_T_To_Xcb_Screen_T (xabscreen : Xab_Screen_T)
+   function Xab_Screen_To_Xcb_Screen (xabscreen : Xab_Types.Screen)
       return xcbada_xproto.xcb_screen_t
    is
       screen : xcbada_xproto.xcb_screen_t;
@@ -181,13 +183,13 @@ package body Xab is
       screen.root_depth            := Unsigned_8'Value  (Integer'Image (xabscreen.Root_Depth));
       screen.allowed_depths_len    := Unsigned_8'Value  (Integer'Image (xabscreen.Allowed_Depths_Len));
       return screen;
-   end Xab_Screen_T_To_Xcb_Screen_T;
+   end Xab_Screen_To_Xcb_Screen;
 
    --  Convert a xab screen to an xcb screen for internal use
-   function Xcb_Screen_T_To_Xab_Screen_T (xcbscreen : xcbada_xproto.xcb_screen_t)
-      return Xab_Screen_T
+   function Xcb_Screen_To_Xab_Screen (xcbscreen : xcbada_xproto.xcb_screen_t)
+      return Xab_Types.Screen
    is
-      screen : Xab_Screen_T;
+      screen : Xab_Types.Screen;
    begin
       screen.Root                  := Integer'Value (Unsigned_32'Image (xcbscreen.root));
       screen.Default_Colormap      := Integer'Value (Unsigned_32'Image (xcbscreen.default_colormap));
@@ -206,6 +208,6 @@ package body Xab is
       screen.Root_Depth            := Integer'Value  (Unsigned_8'Image (xcbscreen.root_depth));
       screen.Allowed_Depths_Len    := Integer'Value  (Unsigned_8'Image (xcbscreen.allowed_depths_len));
       return screen;
-   end Xcb_Screen_T_To_Xab_Screen_T;
+   end Xcb_Screen_To_Xab_Screen;
 end Xab;
 --  vim:ts=3:expandtab:tw=80
