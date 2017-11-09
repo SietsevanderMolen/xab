@@ -49,5 +49,6 @@ package Xab_Types is
       Root_Depth            : aliased Integer;
       Allowed_Depths_Len    : aliased Integer;
    end record;
+
 end Xab_Types;
 --  vim:ts=3:expandtab:tw=80

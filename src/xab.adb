@@ -119,6 +119,45 @@ package body Xab is
       end if;
    end Xab_Has_Xinerama;
 
+   procedure Xab_Map_Window (Connection : Xab_Connection_T;
+                             Window : Xab_Window_T)
+   is
+      vc : xcb.xcb_void_cookie_t;
+      vi : Integer;
+   begin
+      vc := xcbada_xproto.xcb_map_window (Connection, xcbada_xproto.xcb_window_t (Window));
+      vi := xcb.flush(Connection);
+   end Xab_Map_Window;
+
+   procedure Xab_Configure_Window (Connection : Xab_Connection_T;
+                                   Win : Xab_Window_T;
+                                   X : Integer;
+                                   Y : Integer;
+                                   Width : Integer;
+                                   Height : Integer)
+   is
+      Mask : xcbada_xproto.xcb_config_window_t :=
+         (xcbada_xproto.XCB_CONFIG_WINDOW_X or 
+          xcbada_xproto.XCB_CONFIG_WINDOW_Y or
+          xcbada_xproto.XCB_CONFIG_WINDOW_WIDTH or
+          xcbada_xproto.XCB_CONFIG_WINDOW_HEIGHT);
+
+      Values : xcb.xcb_unsigned32_arr := (
+         Interfaces.Unsigned_32 (X),
+         Interfaces.Unsigned_32 (Y),
+         Interfaces.Unsigned_32 (Width),
+         Interfaces.Unsigned_32 (Height));
+
+      vc : xcb.xcb_void_cookie_t;
+      vi : Integer;
+   begin
+      vc := xcbada_xproto.xcb_configure_window (Connection,
+                                                Interfaces.Unsigned_32 (Win),
+                                                Mask,
+                                                Values);
+      vi := xcb.flush(Connection);
+   end Xab_Configure_Window;
+
    --  Convert a xab screen to an xcb screen for internal use
    function Xab_Screen_T_To_Xcb_Screen_T (xabscreen : Xab_Screen_T)
       return xcbada_xproto.xcb_screen_t

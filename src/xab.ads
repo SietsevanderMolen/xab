@@ -52,6 +52,18 @@ package Xab is
    --  Check wether the RandR extension is available on this connection
    function Xab_Has_Randr (Connection : Xab_Connection_T)
       return Boolean;
+
+   --  Helper procedure to configure a window
+   procedure Xab_Configure_Window (Connection : Xab_Connection_T;
+                                   Win : Xab_Window_T;
+                                   X : Integer;
+                                   Y : Integer;
+                                   Width : Integer;
+                                   Height : Integer);
+
+   --  Maps a window
+   procedure Xab_Map_Window (Connection : Xab_Connection_T;
+                             Window : Xab_Window_T);
 private
 
    --  An access type to the xcb_screen_t type
