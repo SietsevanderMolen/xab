@@ -61,8 +61,8 @@ package body Xab_Events.Event_Loop is
          xcbada_xproto.XCB_GRAB_MODE_ASYNC, xcbada_xproto.XCB_GRAB_MODE_ASYNC, root, xcb.XCB_NONE, 3,
          xcbada_xproto.XCB_MOD_MASK_ANY);
       -- other events
-      vc := xcbada_xproto.xcb_change_window_attributes (dpy, root, xcbada_xproto.XCB_CW_EVENT_MASK,
-                                                        events_we_listen_to'Access);
+      --  vc := xcbada_xproto.xcb_change_window_attributes (dpy, root, xcbada_xproto.XCB_CW_EVENT_MASK,
+      --                                                    events_we_listen_to'Access);
       vi := xcb.flush (dpy);
 
       loop

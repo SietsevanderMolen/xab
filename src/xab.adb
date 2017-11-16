@@ -143,7 +143,7 @@ package body Xab is
                                    Height : Integer)
    is
       Mask : xcbada_xproto.xcb_config_window_t :=
-         (xcbada_xproto.XCB_CONFIG_WINDOW_X or 
+         (xcbada_xproto.XCB_CONFIG_WINDOW_X or
           xcbada_xproto.XCB_CONFIG_WINDOW_Y or
           xcbada_xproto.XCB_CONFIG_WINDOW_WIDTH or
           xcbada_xproto.XCB_CONFIG_WINDOW_HEIGHT);
@@ -167,11 +167,23 @@ package body Xab is
    --  Change a window's attributes
    procedure Change_Window_Attributes (Connection : Xab_Types.Connection;
                                        Win : Xab_Types.Window;
-                                       Value_Mask : Xab_Types.Event_Mask;
-                                       Value_List : Integer_Array)
+                                       Value_Mask : Xab_Types.CW;
+                                       Value_List : Xab_Types.Integer_Array)
    is
+      values : xcbada_xproto.int32array_t (Value_List'Range);
+      vc : xcb.xcb_void_cookie_t;
+      vi : Integer;
    begin
-      null;
+      for I in Value_List'Range loop
+         values (I) := Interfaces.Unsigned_32 (Value_List (I));
+      end loop;
+
+      vc := xcbada_xproto.xcb_change_window_attributes
+         (Connection,
+          xcbada_xproto.xcb_window_t (Win),
+          xcbada_xproto.xcb_cw_t (Xab_Types.Pack (Value_Mask)),
+          values);
+      vi := xcb.flush (Connection);
    end Change_Window_Attributes;
 
    function Wait_For_Event (Connection : Xab_Types.Connection)
@@ -232,5 +244,20 @@ package body Xab is
       screen.Allowed_Depths_Len    := Integer'Value  (Unsigned_8'Image (xcbscreen.allowed_depths_len));
       return screen;
    end Xcb_Screen_To_Xab_Screen;
+
+   function Pop_Count(N : Interfaces.Unsigned_32) return Natural
+   is
+      K5555:  constant Interfaces.Unsigned_32 := 16#55555555#;
+      K3333:  constant Interfaces.Unsigned_32 := 16#33333333#;
+      K0f0f:  constant Interfaces.Unsigned_32 := 16#0f0f0f0f#;
+      K0101:  constant Interfaces.Unsigned_32 := 16#01010101#;
+      X: Interfaces.Unsigned_32 := N;
+   begin
+      X :=  X            - (Shift_Right(X, 1)   and k5555);
+      X := (X and k3333) + (Shift_Right(X, 2) and k3333);
+      X := (X            +  (Shift_Right(X, 4)) and K0f0f);
+      X := Shift_Right((x * k0101), 56);
+      return Natural(X);
+   end Pop_Count;
 end Xab;
 --  vim:ts=3:sts=3:sw=3:expandtab:tw=80

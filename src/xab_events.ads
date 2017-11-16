@@ -29,10 +29,15 @@ package Xab_Events is
    function FromXCB (Event : xcb.xcb_generic_event_t)
       return Generic_Event'class;
 
-   type Configure_Request_Event is new Generic_Event with
+   type None is new Generic_Event with
+      record
+         Response_Type : Integer;
+      end record;
+
+   type Configure_Request is new Generic_Event with
       record
          Stack_Mode : Xab_Types.Stack_Mode;
-         Sequence : integer;
+         Sequence : Integer;
          Parent : Xab_Types.Window;
          Window : Xab_Types.Window;
          Sibling : Xab_Types.Window;
@@ -41,8 +46,14 @@ package Xab_Events is
          Width : Integer;
          Height : Integer;
          Border_Width : Integer;
-         --  uint8_t      response_type;
-         --  uint16_t     value_mask;
+      end record;
+
+   type Map_Request is new Generic_Event with
+      record
+         Stack_Mode : Xab_Types.Stack_Mode;
+         Sequence : integer;
+         Parent : Xab_Types.Window;
+         Window : Xab_Types.Window;
       end record;
 end Xab_Events;
 --  vim:ts=3:sts=3:sw=3:expandtab:tw=80
