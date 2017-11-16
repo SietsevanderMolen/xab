@@ -25,9 +25,13 @@ with System,
 with xcb;
 with xcbada_xproto;
 with xcbada_xinerama;
+
+with Xab_Events;
 with Xab_Types;
 
 package Xab is
+   type Integer_Array is array (Natural range <>) of Integer;
+
    --  Connect to xcb using env variables for both the display
    --  and the screen
    function Connect return Xab_Types.Connection;
@@ -38,8 +42,8 @@ package Xab is
 
    --  Connect to xcb
    function Connect (Display_Name : String;
-                         Screen   : Xab_Types.Screen)
-                         return Xab_Types.Connection;
+                     Screen   : Xab_Types.Screen)
+      return Xab_Types.Connection;
 
    --  Return the root screen for this connection
    function Get_Root_Screen (Connection : Xab_Types.Connection)
@@ -55,17 +59,28 @@ package Xab is
 
    --  Helper procedure to configure a window
    procedure Configure_Window (Connection : Xab_Types.Connection;
-                                   Win : Xab_Types.Window;
-                                   X : Integer;
-                                   Y : Integer;
-                                   Width : Integer;
-                                   Height : Integer);
+                               Win : Xab_Types.Window;
+                               X : Integer;
+                               Y : Integer;
+                               Width : Integer;
+                               Height : Integer);
+
+   --  Change a window's attributes
+   procedure Change_Window_Attributes (Connection : Xab_Types.Connection;
+                                       Win : Xab_Types.Window;
+                                       Value_Mask : Xab_Types.Event_Mask;
+                                       Value_List : Integer_Array)
+   with
+      Pre => (Value_List'Length = 12);
 
    --  Maps a window
    procedure Map_Window (Connection : Xab_Types.Connection;
                              Window : Xab_Types.Window);
-private
 
+   --  Wait for an event on the connection
+   function Wait_For_Event (Connection : Xab_Types.Connection)
+      return Xab_Events.Generic_Event'class;
+private
    --  An access type to the xcb_screen type
    type xcb_screen_ptr is access all xcbada_xproto.xcb_screen_t;
    Null_Screen : constant xcb_screen_ptr := null;
@@ -80,4 +95,4 @@ private
    --  @Raises: ConnectionFailedException
    procedure Check_Connection (Connection : Xab_Types.Connection);
 end Xab;
---  vim:ts=3:expandtab:tw=80
+--  vim:ts=3:sts=3:sw=3:expandtab:tw=80

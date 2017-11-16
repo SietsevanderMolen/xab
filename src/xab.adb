@@ -19,6 +19,8 @@
 --                                                                           --
 -------------------------------------------------------------------------------
 
+with Ada.Text_IO;
+with Ada.Unchecked_Conversion;
 with Interfaces.C.Strings;
 with Interfaces; use Interfaces;
 
@@ -41,7 +43,8 @@ package body Xab is
    end Connect;
 
    function Connect (Display_Name : String)
-                         return Xab_Types.Connection is
+      return Xab_Types.Connection
+   is
       Connection : Xab_Types.Connection;
       --  Convert display name to C style string
       xcbdisplayname : Interfaces.C.Strings.chars_ptr :=
@@ -53,8 +56,9 @@ package body Xab is
    end Connect;
 
    function Connect (Display_Name : String;
-                         Screen       : Xab_Types.Screen)
-                         return Xab_Types.Connection is
+                     Screen       : Xab_Types.Screen)
+      return Xab_Types.Connection
+   is
       Connection : Xab_Types.Connection;
       --  Convert display name to C style string
       xcbdisplayname : Interfaces.C.Strings.chars_ptr :=
@@ -65,7 +69,7 @@ package body Xab is
    begin
       Connection := xcb.connect (xcbdisplayname,
                                  xcbscreen'Access);
-      Check_Connection (Connection);
+       Check_Connection (Connection);
       return Connection;
    end Connect;
 
@@ -79,7 +83,7 @@ package body Xab is
       end if;
    end Check_Connection;
 
-   function get_root_screen (Connection : Xab_Types.Connection)
+   function Get_Root_Screen (Connection : Xab_Types.Connection)
       return Xab_Types.Screen
    is
       setup : access xcbada_xproto.xcb_setup_t := xcb.get_setup (Connection);
@@ -87,7 +91,7 @@ package body Xab is
          xcbada_xproto.xcb_setup_roots_iterator (setup).data;
    begin
       return Xcb_Screen_To_Xab_Screen (screen.all);
-   end get_root_screen;
+   end Get_Root_Screen;
 
    function Has_Randr (Connection : Xab_Types.Connection)
       return Boolean
@@ -160,6 +164,25 @@ package body Xab is
       vi := xcb.flush(Connection);
    end Configure_Window;
 
+   --  Change a window's attributes
+   procedure Change_Window_Attributes (Connection : Xab_Types.Connection;
+                                       Win : Xab_Types.Window;
+                                       Value_Mask : Xab_Types.Event_Mask;
+                                       Value_List : Integer_Array)
+   is
+   begin
+      null;
+   end Change_Window_Attributes;
+
+   function Wait_For_Event (Connection : Xab_Types.Connection)
+      return Xab_Events.Generic_Event'class
+   is
+      ev : xcb.xcb_generic_event_t_p := xcb.wait_for_event (Connection);
+      Event : Xab_Events.Generic_Event'Class := Xab_Events.FromXCB (ev.all);
+   begin
+      return Event;
+   end Wait_For_Event;
+
    --  Convert a xab screen to an xcb screen for internal use
    function Xab_Screen_To_Xcb_Screen (xabscreen : Xab_Types.Screen)
       return xcbada_xproto.xcb_screen_t
@@ -210,4 +233,4 @@ package body Xab is
       return screen;
    end Xcb_Screen_To_Xab_Screen;
 end Xab;
---  vim:ts=3:expandtab:tw=80
+--  vim:ts=3:sts=3:sw=3:expandtab:tw=80

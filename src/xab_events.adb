@@ -18,14 +18,30 @@
 --    along with XAB.  If not, see <http://www.gnu.org/licenses/>.           --
 --                                                                           --
 -------------------------------------------------------------------------------
+with Ada.Unchecked_Conversion;
 
 package body Xab_Events is
-   function FromXCB (Request : xcb.xcb_generic_event_t)
+   function FromXCB (Event : xcb.xcb_generic_event_t)
       return Generic_Event'class
    is
-      ev : Configure_Request_Event;
+      response_type : Integer := Integer (Event.response_type);
    begin
-      return ev;
+      case response_type is
+         when xcbada_xproto.XCB_CONFIGURE_REQUEST =>
+            declare
+               function Convert is new Ada.Unchecked_Conversion(
+                  xcb.xcb_generic_event_t,
+                  xcbada_xproto.xcb_configure_request_event_t);
+               e  : xcbada_xproto.xcb_configure_request_event_t :=
+                  Convert (Event);
+               ne : Configure_Request_Event;
+            begin
+               ne.Stack_Mode := Xab_Types.Stack_Mode'Val (e.stack_mode);
+               return ne;
+            end;
+         when others =>
+            Null;
+      end case;
    end FromXCB;
 end Xab_Events;
 --  vim:ts=3:sts=3:sw=3:expandtab:tw=80

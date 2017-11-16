@@ -19,7 +19,6 @@
 --                                                                           --
 -------------------------------------------------------------------------------
 
-with Xab;
 with Xab_Types;
 with xcb;
 with xcbada_xproto;
@@ -27,12 +26,12 @@ with xcbada_xinerama;
 
 package Xab_Events is
    type Generic_Event is tagged null record;
-   function FromXCB (Request : xcb.xcb_generic_event_t)
+   function FromXCB (Event : xcb.xcb_generic_event_t)
       return Generic_Event'class;
 
    type Configure_Request_Event is new Generic_Event with
       record
-         Stack_Mode : Integer;
+         Stack_Mode : Xab_Types.Stack_Mode;
          Sequence : integer;
          Parent : Xab_Types.Window;
          Window : Xab_Types.Window;

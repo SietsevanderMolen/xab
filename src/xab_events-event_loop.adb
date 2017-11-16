@@ -30,11 +30,6 @@ with Xab; use Xab;
 with Xab_Types;
 
 package body Xab_Events.Event_Loop is
-   procedure handle_event (e : in Xab_Events.Event.Object'Class) is
-   begin
-      null;
-   end handle_event;
-
    procedure start_event_loop (connection : Xab_Types.Connection)
    is
       vi     : Integer;
