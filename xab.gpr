@@ -14,6 +14,16 @@ project XAB is
       for Active use "true";
    end Install;
 
+   package Compiler is
+      for Default_Switches ("Ada")
+      use ("-gnatwa",
+           "-gnaty3abcdefhiklmnoprstux",
+           "-Wall",
+           "-g",
+           "-O2",
+           "-gnat12");
+   end Compiler;
+
    for Library_Name use "XAB";
    for Library_Dir use "lib";
 
