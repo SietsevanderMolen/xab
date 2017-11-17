@@ -16,9 +16,9 @@ project XAB is
 
    package Compiler is
       for Default_Switches ("Ada")
-      use ("-gnatwa",
+      use ("-gnata",
+      	   "-gnatwa",
            "-gnaty3abcdefhiklmnoprstux",
-           "-Wall",
            "-g",
            "-O2",
            "-gnat12");

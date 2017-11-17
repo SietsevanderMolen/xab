@@ -148,17 +148,16 @@ package body Xab is
           xcbada_xproto.XCB_CONFIG_WINDOW_WIDTH or
           xcbada_xproto.XCB_CONFIG_WINDOW_HEIGHT);
 
-      Values : xcb.xcb_unsigned32_arr := (
-         Interfaces.Unsigned_32 (X),
-         Interfaces.Unsigned_32 (Y),
-         Interfaces.Unsigned_32 (Width),
-         Interfaces.Unsigned_32 (Height));
+      Values : xcb.xcb_unsigned32_arr := (Unsigned_32 (X),
+                                          Unsigned_32 (Y),
+                                          Unsigned_32 (Width),
+                                          Unsigned_32 (Height));
 
       vc : xcb.xcb_void_cookie_t;
       vi : Integer;
    begin
       vc := xcbada_xproto.xcb_configure_window (Connection,
-                                                Interfaces.Unsigned_32 (Win),
+                                                Unsigned_32 (Win),
                                                 Mask,
                                                 Values);
       vi := xcb.flush(Connection);
@@ -175,7 +174,7 @@ package body Xab is
       vi : Integer;
    begin
       for I in Value_List'Range loop
-         values (I) := Interfaces.Unsigned_32 (Value_List (I));
+         values (I) := Unsigned_32 (Value_List (I));
       end loop;
 
       vc := xcbada_xproto.xcb_change_window_attributes
@@ -245,19 +244,19 @@ package body Xab is
       return screen;
    end Xcb_Screen_To_Xab_Screen;
 
-   function Pop_Count(N : Interfaces.Unsigned_32) return Natural
+   function Pop_Count(N : in Unsigned_32) return Natural
    is
-      K5555:  constant Interfaces.Unsigned_32 := 16#55555555#;
-      K3333:  constant Interfaces.Unsigned_32 := 16#33333333#;
-      K0f0f:  constant Interfaces.Unsigned_32 := 16#0f0f0f0f#;
-      K0101:  constant Interfaces.Unsigned_32 := 16#01010101#;
-      X: Interfaces.Unsigned_32 := N;
+      K55 : constant Unsigned_32 := 16#55555555#;
+      K33 : constant Unsigned_32 := 16#33333333#;
+      K0f : constant Unsigned_32 := 16#0f0f0f0f#;
+      K01 : constant Unsigned_32 := 16#01010101#;
+      X   : Unsigned_32 := N;
    begin
-      X :=  X            - (Shift_Right(X, 1)   and k5555);
-      X := (X and k3333) + (Shift_Right(X, 2) and k3333);
-      X := (X            +  (Shift_Right(X, 4)) and K0f0f);
-      X := Shift_Right((x * k0101), 56);
-      return Natural(X);
+      X :=  X            - (Shift_Right (X, 1)  and K55);
+      X := (X and K33)   + (Shift_Right (X, 2)  and K33);
+      X := (X            + (Shift_Right (X, 4)) and K0f);
+      X := Shift_Right ((x * K01), 24);
+      return Natural (X);
    end Pop_Count;
 end Xab;
 --  vim:ts=3:sts=3:sw=3:expandtab:tw=80

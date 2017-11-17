@@ -128,7 +128,7 @@ package Xab_Types is
       PROPERTY_CHANGE       : Bit := 0;
       COLOR_MAP_CHANGE      : Bit := 0;
       OWNER_GRAB_BUTTON     : Bit := 0;
-      Padding                          : Bit := 0;
+      Padding               : Bit := 0;
    end record;
    for Event_Mask use record
       NO_EVENT              at 0 range  0 ..  0;
@@ -157,7 +157,7 @@ package Xab_Types is
       PROPERTY_CHANGE       at 0 range 23 .. 23;
       COLOR_MAP_CHANGE      at 0 range 24 .. 24;
       OWNER_GRAB_BUTTON     at 0 range 25 .. 25;
-      Padding                          at 0 range 26 .. 31;
+      Padding               at 0 range 26 .. 31;
    end record;
    function Pack is new Ada.Unchecked_Conversion (Source => Event_Mask,
                                                   Target => Interfaces.Unsigned_32);
